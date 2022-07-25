@@ -24,6 +24,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -36,6 +37,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -48,6 +50,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -60,6 +63,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -72,6 +76,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -84,6 +89,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -96,6 +102,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -108,6 +115,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -120,6 +128,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
                 new Birthday
@@ -132,6 +141,7 @@ namespace Persistence
                     Housenumber = 12,
                     HousenumberAddition = "a",
                     Age = 18,
+                    City = "Amsterdam",
                     Postcode = "1234AB"
                 },
             };
