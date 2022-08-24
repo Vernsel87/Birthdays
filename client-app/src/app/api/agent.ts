@@ -31,7 +31,7 @@ const requests = {
 
 const Birthdays = {
   list: () => requests.get<Birthday[]>("/birthdays"),
-  details: (id: string) => axios.get<Birthday>(`/birthdays/${id}`),
+  details: (id: string) => requests.get<Birthday>(`/birthdays/${id}`),
   create: (birthday: Birthday) => axios.post<void>("/birthdays", birthday),
   update: (birthday: Birthday) => axios.put<void>(`/birthdays/${birthday.id}`, birthday),
   delete: (id: string) => axios.delete<void>(`/birthdays/${id}`),

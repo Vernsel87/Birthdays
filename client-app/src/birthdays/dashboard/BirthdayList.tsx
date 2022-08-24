@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { SyntheticEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button,  Item,  Segment } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
 
@@ -33,7 +34,7 @@ export default observer(function BirthdayList(){
                                 </div>
                                 </Item.Description>
                                 <Item.Extra>
-                                    <Button onClick={()=> birthdayStore.selectBirthday(birthday.id)} floated='right' content="View" color="blue" />
+                                    <Button as={Link} to={`/birthdays/${birthday.id}`} floated='right' content="View" color="blue" />
                                     <Button 
                                     name={birthday.id}
                                     loading={loading && target === birthday.id} onClick={(e)=> handleBrthdayDelete(e, birthday.id)} floated='right' content="Delete" color="red" />

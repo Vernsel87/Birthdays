@@ -1,27 +1,38 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./styles.css";
 import { Container } from "semantic-ui-react";
 import NavBar from "./layout/NavBar";
 import BirthdayDashboard from "../birthdays/dashboard/BirthdayDashboard";
-import LoadingComponent from "./layout/LoadingComponent";
-import { useStore } from "./stores/store";
+
 import { observer } from "mobx-react-lite";
+import { Route, useLocation } from "react-router-dom";
+import HomePage from "../home/HomePage";
+import BirthdayForm from "../birthdays/Form/BirthdayForm";
+import BirthdayDetails from "../birthdays/details/BirthdayDetails";
 
 function App() {
-  const { birthdayStore } = useStore();
-
-  useEffect(() => {
-    birthdayStore.loadBirthdays();
-  }, [birthdayStore]);
-
-  if (birthdayStore.loadingInitial) return <LoadingComponent />;
+  const location = useLocation();
 
   return (
     <>
-      <NavBar />
-      <Container style={{ marginTop: "7em" }}>
-        <BirthdayDashboard />
-      </Container>
+      <Route exact path="/" component={HomePage} />
+      <Route
+        path={"/(.+)"}
+        render={() => (
+          <>
+            <NavBar />
+            <Container style={{ marginTop: "7em" }}>
+              <Route exact path="/birthdays" component={BirthdayDashboard} />
+              <Route path="/birthdays/:id" component={BirthdayDetails} />
+              <Route
+                key={location.key}
+                path={["/createBirthday", "/manage/:id"]}
+                component={BirthdayForm}
+              />
+            </Container>
+          </>
+        )}
+      />
     </>
   );
 }

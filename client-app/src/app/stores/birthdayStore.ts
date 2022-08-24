@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Birthday } from "../models/birthday";
-import { v4 as uuid } from "uuid";
+
 
 export default class BirthdayStore {
   birthdayRegistry = new Map<string, Birthday>();
@@ -20,44 +20,61 @@ export default class BirthdayStore {
   }
 
   loadBirthdays = async () => {
-    this.setLoadingInitial(true);
+    this.loadingInitial = true;
     try {
       const birthdays = await agent.Birthdays.list();
       birthdays.forEach((birthday) => {
-        birthday.dateOfBirth = birthday.dateOfBirth.split("T")[0]; // Only get the first segment of the date
-        this.birthdayRegistry.set(birthday.id, birthday);
-        this.setLoadingInitial(false);
+      this.setBirthday(birthday);                
       });
+      this.setLoadingInitial(false);
     } catch (error) {
       console.log(error);
       this.setLoadingInitial(false);
     }
   };
 
+  loadBirthday = async (id: string) =>{
+    let birthday = this.getBirthday(id);
+    
+    if(birthday){
+      this.selectedBirthday = birthday;
+      return birthday;
+    } else {
+      this.loadingInitial = true;
+      try {
+        birthday = await agent.Birthdays.details(id);
+        this.setBirthday(birthday);
+        runInAction(() => {
+          this.selectedBirthday = birthday;
+          this.loadingInitial = false;
+
+        });
+        
+        
+        return birthday;
+      } catch (error){
+        console.log(error);
+        this.setLoadingInitial(false);
+      }
+    }
+  }
+
+  setBirthday = (birthday : Birthday) => {
+    birthday.dateOfBirth = birthday.dateOfBirth.split("T")[0]; // Only get the first segment of the date
+    this.birthdayRegistry.set(birthday.id, birthday);
+  }
+
+  private getBirthday = (id: string) =>{
+    return this.birthdayRegistry.get(id);
+  }
+
   setLoadingInitial = (state: boolean) => {
     this.loadingInitial = state;
   };
 
-  selectBirthday = (id: string) => {
-    this.selectedBirthday = this.birthdayRegistry.get(id);
-  };
-
-  cancelSelectedBirthday = () => {
-    this.selectedBirthday = undefined;
-  };
-
-  openForm = (id?: string) => {
-    id ? this.selectBirthday(id) : this.cancelSelectedBirthday();
-    this.editMode = true;
-  };
-
-  closeForm = () => {
-    this.editMode = false;
-  };
-
+  
   createBirthday = async (birthday: Birthday) => {
     this.loading = true;
-    birthday.id = uuid();
     try {
       await agent.Birthdays.create(birthday);
       runInAction(() => {
@@ -92,13 +109,16 @@ export default class BirthdayStore {
     }
   }
 
+  
+
+
+
   deleteBirthday = async (id:string) =>{
     this.loading = true;
     try{
       await agent.Birthdays.delete(id);
       runInAction(()=>{
         this.birthdayRegistry.delete(id);
-        if(this.selectedBirthday?.id === id)  this.cancelSelectedBirthday();
         this.loading = false;
       })
     }catch(err){
