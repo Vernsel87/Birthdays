@@ -1,48 +1,29 @@
-import { observer } from 'mobx-react-lite';
-import React, { SyntheticEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button,  Item,  Segment } from 'semantic-ui-react';
-import { useStore } from '../../app/stores/store';
+import { observer } from "mobx-react-lite";
+import { Fragment } from "react";
+import { Header, Item, Segment } from "semantic-ui-react";
+import { useStore } from "../../app/stores/store";
+import BirthdayListItem from "./BirthdayListItem";
 
-export default observer(function BirthdayList(){
-    const {birthdayStore} = useStore();
-    const {deleteBirthday, birthdaysByDate, loading} = birthdayStore;
-    const [target, setTarget] = useState("");
+export default observer(function BirthdayList() {
+  const { birthdayStore } = useStore();
+  const { groupedBirthdays } = birthdayStore;
 
-    function handleBrthdayDelete(e: SyntheticEvent<HTMLButtonElement>, id: string ){
-        setTarget(e.currentTarget.name);
-        deleteBirthday(id);
-    }
-    return (
-        <Segment >
+  return (
+    <>
+      {groupedBirthdays.map(([group, birthdays]) => (
+        <Fragment key={group}>
+          <Header sub color="teal">
+            {group}
+          </Header>
+          <Segment>
             <Item.Group divided>
-                {birthdaysByDate.map(birthday => (
-                    <Item key={birthday.id} >
-                        <Item.Content>
-                            <Item.Header as='a'>{birthday.firstName+ ' '  + birthday.lastName }</Item.Header>
-                            <Item.Meta>Birthday: {birthday.dateOfBirth}</Item.Meta>
-                            <Item.Meta>Age: {birthday.age}</Item.Meta>
-                            <Item.Description>
-                                <div>
-                                {birthday.ideas}
-                                </div>
-                                <div>
-                                    {birthday.streetname} {birthday.housenumber} {birthday.housenumberAddition}
-                                </div>
-                                <div>
-                                    {birthday.postcode}  {birthday.city}
-                                </div>
-                                </Item.Description>
-                                <Item.Extra>
-                                    <Button as={Link} to={`/birthdays/${birthday.id}`} floated='right' content="View" color="blue" />
-                                    <Button 
-                                    name={birthday.id}
-                                    loading={loading && target === birthday.id} onClick={(e)=> handleBrthdayDelete(e, birthday.id)} floated='right' content="Delete" color="red" />
-                                </Item.Extra>
-                        </Item.Content>
-                    </Item> 
-                ))}
+              {birthdays.map((birthday) => (
+                <BirthdayListItem key={birthday.id} birthday={birthday} />
+              ))}
             </Item.Group>
-        </Segment>
-    );
-})
+          </Segment>
+        </Fragment>
+      ))}
+    </>
+  );
+});

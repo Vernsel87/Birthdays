@@ -19,6 +19,16 @@ export default class BirthdayStore {
     Date.parse(a.dateOfBirth)  - Date.parse(b.dateOfBirth));
   }
 
+  get groupedBirthdays(){
+    return Object.entries(
+        this.birthdaysByDate.reduce((birthdays, birthday)=>{
+          const dateOfBirth = birthday.dateOfBirth;
+          birthdays[dateOfBirth] = birthdays[dateOfBirth] ? [...birthdays[dateOfBirth], birthday] : [birthday];
+          return birthdays;
+        }, {} as {[key: string] : Birthday[] })
+    );
+  }
+
   loadBirthdays = async () => {
     this.loadingInitial = true;
     try {
