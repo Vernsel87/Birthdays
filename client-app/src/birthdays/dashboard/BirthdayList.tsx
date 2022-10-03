@@ -14,8 +14,7 @@ export default observer(function BirthdayList() {
         <Fragment key={group}>
           <Header sub color="teal">
             {group}
-          </Header>
-            
+          </Header>           
               {birthdays.map((birthday) => (
                 <BirthdayListItem key={birthday.id} birthday={birthday} />
               ))}
