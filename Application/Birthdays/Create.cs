@@ -5,17 +5,18 @@ using System.Threading.Tasks;
 using MediatR;
 using Domain;
 using Persistence;
+using Application.Core;
 
 namespace Application.Birthdays
 {
     public class Create
     {
-        public class Command: IRequest
+        public class Command: IRequest<Result<Unit>>
         {
             public Birthday Birthday {get; set;} 
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
         private readonly DataContext _context;
             public Handler(DataContext context)
@@ -24,13 +25,15 @@ namespace Application.Birthdays
 
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 _context.Birthdays.Add(request.Birthday);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if(!result) return Result<Unit>.Failure("Fauked to create activity");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

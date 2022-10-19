@@ -11,37 +11,38 @@ using Application.Birthdays;
 
 namespace API.Controllers
 {
-    public class BirthdaysController :BaseApiController
+    public class BirthdaysController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Birthday>>> GetBirthdays()
+        public async Task<ActionResult> GetBirthdays()
         {
-            return await Mediator.Send(new List.Query() );
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Birthday>> GetBirthday(Guid id)
-        {
-            return await Mediator.Send(new Details.Query{Id = id });
+        {            
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> CreateBirthday(Birthday birthday)
         {
-            return Ok(await Mediator.Send(new Create.Command{Birthday = birthday}));
+            return HandleResult(await Mediator.Send(new Create.Command { Birthday = birthday }));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> EditBirthday(Guid id, Birthday birthday)
         {
+
             birthday.Id = id;
-            return Ok(await Mediator.Send(new Edit.Command{Birthday = birthday}));
+            return HandleResult(await Mediator.Send(new Edit.Command { Birthday = birthday }));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBirthday(Guid id)
         {
-            return Ok(await Mediator.Send(new Delete.Command{Id = id}));
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
     }
 }
